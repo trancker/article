@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Portfolio</title>
+	<!-- css files -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+
+	<link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
+	<meta name="author" content="Hassan Ali">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+	<body>
+		<!-- Navbar -->
+		<nav class="nav container void-background">
+			<!-- This "nav-menu" is hidden on mobile -->
+			<!-- Add the modifier "is-active" to display it on mobile -->
+			<div class="nav-left">
+				<a href="https://medium.com/@tanzilidrisi68/" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-medium"></i>
+					</span>
+				</a>
+				<a href="http://github.com/ryan-repo" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-github"></i>
+					</span>
+				</a>
+				<a href="https://www.linkedin.com/in/mohammad-tanzil-idrisi-077041165/" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-linkedin"></i>
+					</span>
+				</a>				
+			</div>
+
+			<div class="nav-right nav-menu">
+				<a class="nav-item" href="#about">About</a>
+				<a class="nav-item" href="#article">Scholarly Article</a>
+				<a class="nav-item" href="#social">Social</a>
+			</div>
+
+			<!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+			<!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+			<span class="nav-toggle">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</nav>
+				
+		<!-- About Me -->
+		<section id="about" class="section section-1">
+			<div class="container has-text-centered">
+				<!-- Source: https://flic.kr/p/pAZBNK -->
+				<img class="avatar" src="assets/img/profile.jpeg">
+			</div>
+			<div class="container"></br>
+				<p class="intro">
+					Hi, I am Mohammad Tanzil Idrisi. I am a Founder, Author, Developer and AI and ML Enthusiast. 
+				</p>
+			</div>
+		</section>
+		
+		<!-- Projects -->
+		<section  id="article" class="section section-2">
+			<div class="container">
+				<div class="has-text-centered">
+					<h3 class="title is-3">Scholarly Article</h3>
+				</div>
+				
+				<div class="columns is-multiline is-desktop">
+					<!-- Project 1 -->
+					<div class="column">
+						<div class="box project-text">
+							<article>
+								<div>
+									<figure class="image project-figure">
+										<img src="assets/img/project-1.jpg" alt="Image">
+									</figure>
+								</div>
+								<div>			
+									<i text-align = "center">
+										Examining switching of different dimensions in Universe and ways and phenomena that can be involve in Time Travel.
+									</i>
+									<a style="font-size: 20px" href="article1.html">Read more>>></a>
+								</div>
+							</article>
+						</div>
+					</div>
+					<!-- Project 2 -->
+					<div class="column">
+						<div class="box project-text">
+							<article>
+								<div>
+									<figure class="image project-figure">
+										<img src="assets/img/compiler.png" alt="Image">
+									</figure>
+								</div>
+								<div>			
+									<i>
+										Customizing the compiler and linker used by setuptools
+									</i>
+									<a style="font-size: 20px" target ="blank" href="https://medium.com/@tanzilidrisi68/customizing-the-compiler-and-linker-used-by-setuptools-f2162157c371">Read more>>></a>
+								</div>
+							</article>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Trigger/Open The Modal -->
+			<h3 id="myBtn">Other Articles</h3>
+
+				<!-- The Modal -->
+				<div id="myModal" class="modal">
+
+  				<!-- Modal content -->
+  				<div class="modal-content">
+   					 <span class="close">&times;</span>
+    			<h4>You don't have access to read other articles</h4>
+  				</div>
+
+			</div>
+		</section>
+
+		<!-- Social -->
+		<section id="social" class="section section-3">
+			<div class="container">
+				<div class="has-text-centered">					
+					<h3 class="title is-3">Let's Socialize</h3>
+				</div>
+				<div class="social-container columns">
+					<div class="column is-6 has-text-centered">
+						<a target="_blank" href="https://www.linkedin.com/in/shah-rukh-khan-716185100/?originalSubdomain=in"><img class="" src="assets/img/linkedin.png"></a>
+						<!-- The Modal -->
+						<div id="myModal" class="modal">
+
+							<!-- Modal content -->
+							<div class="modal-content">
+	  							<span class="close">&times;</span>
+	  							<p>Some text in the Modal..</p>
+							</div>
+  
+  						</div>	
+					</div>
+					<div class="column is-6 has-text-centered">
+						<a target="_blank" href="https://www.facebook.com/Hassan.Helfi"><img class="" src="assets/img/facebook.png"></a>
+					</div>
+				</div>
+			</div>
+		</section>	
+		
+		<!-- Footer -->
+		<section class="section-4 has-text-centered container">
+			<a1 href="#about">😎 Mohammad Tanzil Idrisi 😎</a1>
+		</section>
+		
+		<!-- Scripts  -->
+		<script src="controller.js"></script>		
+	</body>	
+</html>

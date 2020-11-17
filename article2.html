@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Portfolio</title>
+	<!-- css files -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/styles1.css">
+
+
+	<link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
+	<meta name="author" content="Mohammad Tanzil Idrisi">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+	<body>
+		<!-- Navbar -->
+		<nav class="nav container void-background">
+			<!-- This "nav-menu" is hidden on mobile -->
+			<!-- Add the modifier "is-active" to display it on mobile -->
+			<div class="nav-left">
+				<a href="https://medium.com/@tanzilidrisi68/" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-medium"></i>
+					</span>
+				</a>
+				<a href="http://github.com/ryan-repo" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-github"></i>
+					</span>
+				</a>
+				<a href="https://www.linkedin.com/in/mohammad-tanzil-idrisi-077041165/" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-linkedin"></i>
+					</span>
+				</a>				
+			</div>
+
+			<div class="nav-right nav-menu">
+				<a class="nav-item" href="index.html">About</a>
+				<a class="nav-item" href="index.html">Scholarly Article</a>
+				<a class="nav-item" href="index.html">Social</a>
+			</div>
+
+			<!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+			<!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+			<span class="nav-toggle">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+        </nav>
+        
+
+        <section id="about" class="section section-1">
+			<div class="container has-text-centered">
+                <!-- Source: https://flic.kr/p/pAZBNK -->
+                <h1>Customizing the compiler and linker used by setuptools
+                    </h1>
+                <img src="assets/img/compiler.png" alt="Image">
+			</div>
+			<div class="container"></br>
+				<p class="intro">
+					This post is about how to customize the compiler and linker used when building a C/C++ extension for Python using setuptools.<br>
+I recently ran into the problem of configuring setuptools to use a custom compiler and linker, and these are my notes on how I did that.<br>
+As an example, here is a simple setup.py for building the extension spam from spammodule.c:
+<div class="column">
+    <div class="box project-text">
+        <article>
+            
+            <div>			
+                <p text-align = "center">
+                    from setuptools import setup
+setup(
+    name="spam",
+    ext_modules=[Extension("spam", sources=["spammodule.c"])], 
+    zip_safe=False
+)
+                </p>
+                
+            </div>
+        </article>
+    </div>
+</div><br>from setuptools import setup
+setup(
+    name="spam",
+    ext_modules=[Extension("spam", sources=["spammodule.c"])], 
+    zip_safe=False
+)
+Invoking setup.py, we can see the compiler and flags used for building the extension. On my Mac:
+$ python setup.py build_ext --inplace
+running build_ext
+building '*' extension
+creating build
+creating build/temp.macosx-10.9-x86_64-3.7
+gcc -Wno-unused-result -Wsign-compare -Wunreachable-code -DNDEBUG -g -fwrapv -O3 ...
+Using a different compiler than gcc is easy – just set the value of the CC environment variable:
+$ CC=g++ python setup.py build_ext --inplace
+running build_ext
+building 'spam' extension
+creating build
+creating build/temp.macosx-10.9-x86_64-3.7
+g++ -Wno-unused-result -Wsign-compare -Wunreachable-code -DNDEBUG -g -fwrapv -O3 ...
+The compiler has changed from gcc to g++, but we notice that the arguments passed to the compiler remain the same. This can be a problem if you want to use a compiler that doesn’t support those argument.
+Where do the compiler and linker flags come from?
+If you’re wondering where the compiler flags being used (-Wno-unsed-result -Wsign-compare ...) come from, they are set in the configuration used to compile CPython – see here.
+You can use distutils.sysconfig to inspect their values:
+>>> import distutils.sysconfig
+>>> distutils.sysconfig.get_config_var("CFLAGS")
+Also see distutils.sysconfig.get_config_vars() to get the values of all configuration options.
+You can override these flags entirely and pass your own flags using the extra_compile_args and extra_link_args options, as follows:
+from setuptools.command.build_ext import build_ext
+from setuptools import Extension, setup
+class custom_build_ext(build_ext):
+    def build_extensions(self):
+        # Override the compiler executables. Importantly, this
+        # removes the "default" compiler flags that would
+        # otherwise get passed on to to the compiler, i.e.,
+        # distutils.sysconfig.get_var("CFLAGS").
+        self.compiler.set_executable("compiler_so", "g++")
+        self.compiler.set_executable("compiler_cxx", "g++")
+        self.compiler.set_executable("linker_so", "g++")
+        build_ext.build_extensions(self)
+[
+setup(
+    name="spam",
+    ext_modules=[
+        Extension(
+            "spam", 
+            sources=["spammodule.c"],
+            extra_compile_args=["-arch", "x86_64"],
+            extra_link_args=["-undefined", "dynamic_lookup"]
+        )
+    ],
+    zip_safe=False,
+    cmdclass={"build_ext": custom_build_ext}
+)
+Now we see that we have full control over the flags passed to the compiler and linker commands:
+$ python setup.py build_ext --inplace
+running build_ext
+building 'spam' extension
+creating build
+creating build/temp.macosx-10.9-x86_64-3.7
+g++ -I/Users/tanzil786/miniconda3/envs/sci37/include/python3.7m -c spammodule.c -o build/temp.macosx-10.9-x86_64-3.7/spammodule.o -arch x86_64
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+creating build/lib.macosx-10.9-x86_64-3.7
+g++ -arch x86_64 build/temp.macosx-10.9-x86_64-3.7/spammodule.o -o build/lib.macosx-10.9-x86_64-3.7/spam.cpython-37m-darwin.so -undefined dynamic_lookup
+copying build/lib.macosx-10.9-x86_64-3.7/spam.cpython-37m-darwin.so -> ~
+				</p>
+			</div>
+        </section>
+        
+        <section class="section-4 has-text-centered container">
+			<a1 href="#about">Mohammad Tanzil Idrisi</a1>
+		</section>
+		
+		<!-- Scripts  -->
+		<script src="controller.js"></script>		
+	</body>	
+</html>
+            
