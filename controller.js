@@ -36,3 +36,11 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
